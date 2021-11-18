@@ -29,27 +29,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  intl: ^0.17.0-nullsafety.2
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.3
+  shrine_images: ^2.0.1
+  cloud_firestore: ^3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^1.0.0
-
-# For information on the generic Dart part of this file, see the
-# following page: https://dart.dev/tools/pub/pubspec
-
-# The following section is specific to Flutter.
+  firebase_auth: ^3.2.0
+  google_sign_in: ^5.2.1
+  flutter_signin_button: ^2.0.0
+  firebase_core: ^1.10.0
 flutter:
 
   # The following line ensures that the Material Icons font is
