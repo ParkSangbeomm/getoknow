@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+class CreateAccount extends StatefulWidget {
+  const CreateAccount({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<CreateAccount> createState() => _CreateAccountState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _CreateAccountState extends State<CreateAccount> {
   final organizationNameController = TextEditingController();
   final organizationIntroduceController = TextEditingController();
   final organizationCodeEditController = TextEditingController();
@@ -39,7 +39,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         Navigator.pop(context);
                       },
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.23),
+                    SizedBox(width: MediaQuery.of(context).size.width * 0.18),
                     const Text("Create Organization", textAlign: TextAlign.right, style: TextStyle(color: Color(0xff9bb7e7), fontSize: 25, fontWeight: FontWeight.bold)),
                   ],
                 ),
