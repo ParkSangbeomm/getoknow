@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "142789111040",
+    "project_id": "getoknow-976ef",
+    "storage_bucket": "getoknow-976ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:142789111040:android:25b5ce5118f73fcee357e5",
+        "android_client_info": {
+          "package_name": "com.example.getoknow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "142789111040-nds8unpjj92k46ntj822bk102f392oh5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.getoknow",
+            "certificate_hash": "5b46563b17af8d5f71a680877b2e1a26a10ac877"
+          }
+        },
+        {
+          "client_id": "142789111040-h7u82at646punet3huka74j4p2vn5knr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvUHzkfk9fRT9zf6GrIC2tCTk8XRvf-ok"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "142789111040-h7u82at646punet3huka74j4p2vn5knr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
