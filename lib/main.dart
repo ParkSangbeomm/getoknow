@@ -1,8 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'my_info.dart';
 import 'organization_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-void main() {
+
+FirebaseAuth auth = FirebaseAuth.instance;
+var _instance = FirebaseFirestore.instance;
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -69,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
             TextButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SecondPage()));
+              onPressed: () async{
+                _signInWithGoogle();
               },
               child:Text(
               'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
@@ -78,6 +89,43 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+  /*
+  Future<bool> userExists(String username) async =>
+      (await _instance.collection("users").where("username", isEqualTo: username).getDocuments()).documents.length > 0;
+  */
+  void _signInWithGoogle() async {
+    try {
+      UserCredential? userCredential;
+
+      if (kIsWeb) {
+        GoogleAuthProvider googleProvider = GoogleAuthProvider();
+        userCredential = await auth.signInWithPopup(googleProvider);
+      } else {
+        final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+        final GoogleSignInAuthentication googleAuth =
+        await googleUser!.authentication;
+        final OAuthCredential googleAuthCredential =
+        GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        userCredential = await auth.signInWithCredential(googleAuthCredential);
+      }
+
+      final user = userCredential.user;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Sign In ${user?.uid} with Google"),
+      ));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => SecondPage()));
+    } catch (e) {
+      print(e);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Failed to sign in with Google: ${e}"),
+      ));
+    }
   }
 }
 
@@ -107,6 +155,10 @@ class SecondPage extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateAccount()));
                 },
                 child: const Text('Enter existing getoknow chart!', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),)),
+            TextButton(
+              onPressed: (){Navigator.pop(context);},
+              child: Text('Go Back'),
+            )
           ],
         ),
       ),
