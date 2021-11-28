@@ -43,6 +43,8 @@ dev_dependencies:
   google_sign_in: ^5.2.1
   flutter_signin_button: ^2.0.0
   firebase_core: ^1.10.0
+  graphview: ^1.0.0
+  simple_gesture_detector: ^0.2.0
 flutter:
 
   # The following line ensures that the Material Icons font is
