@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'organizationchart.dart';
+
 class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
 
@@ -15,7 +17,7 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffdfe4ee),
+      backgroundColor: const Color(0xffdfe4ee),
       body: ListView(
           children: <Widget>[Column(
             children: [
@@ -109,7 +111,8 @@ class _CreateAccountState extends State<CreateAccount> {
                         width: MediaQuery.of(context).size.width * 0.65,
                         child: ElevatedButton(
                             child: Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            onPressed: () {  },
+                            onPressed: () {
+                            },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(Color(0xff9bb7e7)),
                             )

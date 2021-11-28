@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "142789111040",
-    "project_id": "getoknow-976ef",
-    "storage_bucket": "getoknow-976ef.appspot.com"
+    "project_number": "798144514436",
+    "project_id": "fir-gettoknow-58d98",
+    "storage_bucket": "fir-gettoknow-58d98.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:142789111040:android:25b5ce5118f73fcee357e5",
+        "mobilesdk_app_id": "1:798144514436:android:668538acb6a6e68fc7b5d1",
         "android_client_info": {
           "package_name": "com.example.getoknow"
         }
       },
       "oauth_client": [
         {
-          "client_id": "142789111040-nds8unpjj92k46ntj822bk102f392oh5.apps.googleusercontent.com",
+          "client_id": "798144514436-a3dads3lkoemk4vr8o4kjc9c11q3oeac.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.getoknow",
-            "certificate_hash": "5b46563b17af8d5f71a680877b2e1a26a10ac877"
+            "certificate_hash": "c4862e90693cfa15e46701aa0b865b57c9e29fd5"
           }
         },
         {
-          "client_id": "142789111040-h7u82at646punet3huka74j4p2vn5knr.apps.googleusercontent.com",
+          "client_id": "798144514436-ph5mc1km906srtupuk10scmqatku3ql7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDvUHzkfk9fRT9zf6GrIC2tCTk8XRvf-ok"
+          "current_key": "AIzaSyCV0P9itVDOiZh0Z_gHhHysbLsvPjBHjCE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "142789111040-h7u82at646punet3huka74j4p2vn5knr.apps.googleusercontent.com",
+              "client_id": "798144514436-ph5mc1km906srtupuk10scmqatku3ql7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
