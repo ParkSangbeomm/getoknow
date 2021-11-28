@@ -46,32 +46,47 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffdfe4ee),
-      body: Center(
+    return FutureBuilder(
+        future: Init.instance.initialize(),
+    builder: (context, AsyncSnapshot snapshot) {
+    // Show splash screen while waiting for app resources to load:
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return const MaterialApp(home: Splash());
+    } else {
+      return Scaffold(
+        backgroundColor: const Color(0xffdfe4ee),
+        body: Center(
         // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
-            TextButton(
-              onPressed: (){
-                FirebaseRequest().signInWithGoogle().
-                then((result){
-                  if(result != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SecondPage()),
-                    );
-                  }
-                });
-              },
-              child:Text(
-              'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
-          ],
+    // in the middle of the parent.
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
+              TextButton(
+                onPressed: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SecondPage()),
+                  );
+              /*
+                  FirebaseRequest().signInWithGoogle().
+                  then((result){
+                    if(result != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SecondPage()),
+                      );
+                    }
+                  });*/
+                },
+                child:Text(
+                  'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
+            ],
+          ),
         ),
-      ),
+      );
+    }
+    }
     );
   }
 }
@@ -135,5 +150,31 @@ class FirebaseRequest{
   Future <void> logout() async{
     await _googleSignIn.signOut();
     await _auth.signOut();
+  }
+}
+
+class Init {
+  Init._();
+  static final instance = Init._();
+
+  Future initialize() async {
+  // This is where you can initialize the resources needed by your app while
+  // the splash screen is displayed.  Remove the following example because
+  // delaying the user experience is a bad design practice!
+    await Future.delayed(const Duration(seconds: 4));
+  }
+}
+
+class Splash extends StatelessWidget {
+  const Splash({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor:const Color(0xffdfe4ee),
+      body: Center(
+        child: Image.asset('assets/logo.png')
+      )
+    );
   }
 }
