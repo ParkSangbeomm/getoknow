@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'organizationChart.dart';
+
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
 
@@ -63,7 +65,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       const Center(
                         child: CircleAvatar(
                           radius: 80,
-                          backgroundImage: AssetImage('img/profile.jpeg'),
+                          backgroundImage: AssetImage('assets/profile.png'),
                         ),
                       ),
                       Center(
@@ -209,7 +211,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         width: MediaQuery.of(context).size.width * 0.65,
                         child: ElevatedButton(
                             child: const Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            onPressed: () {  },
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => ChartPage()),
+                              );
+                            },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(const Color(0xff9bb7e7)),
                             )
