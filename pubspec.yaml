@@ -34,6 +34,9 @@ dependencies:
   cupertino_icons: ^1.0.3
   shrine_images: ^2.0.1
   cloud_firestore: ^3.1.0
+  google_maps_flutter: ^2.1.0
+  http: ^0.13.4
+  json_annotation: ^4.3.0
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,7 @@ import 'package:graphview/GraphView.dart';
 
 import '../utils.dart';
 import 'calendar.dart';
+import 'googlemap.dart';
 import 'src/table_calendar.dart';
 import 'table_calendar.dart';
 
@@ -51,10 +52,10 @@ class _ChartPageState extends State<ChartPage> {
                       size: 30.0,
                     ),
                     onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => CalendarPage()),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => FindgymPage()),
+                      );
                     },
                   ),
                   IconButton(
