@@ -1,24 +1,35 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+
 
 import 'organizationChart.dart';
 
-class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({Key? key}) : super(key: key);
+class MyProfilePage extends StatefulWidget {
+  const MyProfilePage({Key? key}) : super(key: key);
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
+  State<MyProfilePage> createState() => _MyProfilePageState();
 }
 
-class _EditProfilePageState extends State<EditProfilePage> {
+class _MyProfilePageState extends State<MyProfilePage> {
   final nameController = TextEditingController();
   final yearController = TextEditingController();
   final monthController = TextEditingController();
   final dayController = TextEditingController();
-  final superiorNameController = TextEditingController();
   final superiorNumberController = TextEditingController();
   final organizationCodeController = TextEditingController();
   final contactController = TextEditingController();
   final introduceController = TextEditingController();
+  File? _image;
+  String? name;
+  int? year; int? month; int? day;
+  String? superiorNumber;
+  String? organizationCode;
+  String? contact;
+  String? introduce;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       const Center(
                         child: CircleAvatar(
                           radius: 80,
-                          backgroundImage: AssetImage('assets/profile.png'),
+                          //backgroundImage: AssetImage('assets/profile.png'),
                         ),
                       ),
                       Center(
@@ -78,7 +89,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
-                        child: TextField(
+                        child: TextFormField(
                           controller: nameController,
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(10.0),
@@ -87,6 +98,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            name = value;
+                          }
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
@@ -106,6 +120,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   filled: true,
                                   isDense: true,
                                 ),
+                                onChanged: (value) {
+                                  year = int.parse(value);
+                                }
                               ),
                             ),
                             const Text(" 년 "),
@@ -120,6 +137,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   filled: true,
                                   isDense: true,
                                 ),
+                                onChanged: (value) {
+                                  month = int.parse(value);
+                                }
                               ),
                             ),
                             const Text(" 월 "),
@@ -134,18 +154,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                   filled: true,
                                   isDense: true,
                                 ),
+                                onChanged: (value) {
+                                  day = int.parse(value);
+                                }
                               ),
                             ),
                             const Text(" 일"),
                           ]),
 
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
-                      const Text("상관 이름 / 일련 번호"),
+                      const Text("상관 일련 번호"),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
                         child: TextField(
-                          controller: superiorNameController,
+                          controller: superiorNumberController,
                           decoration: const InputDecoration(
                             contentPadding: EdgeInsets.all(10.0),
                             border: OutlineInputBorder(),
@@ -153,6 +176,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            superiorNumber = value;
+                          }
                         ),
                       ),
 
@@ -170,6 +196,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            organizationCode = value;
+                          }
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
@@ -187,6 +216,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            contact = value;
+                          }
                         ),
                       ),
 
@@ -204,6 +236,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            introduce = value;
+                          }
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.06),
@@ -211,11 +246,29 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         width: MediaQuery.of(context).size.width * 0.65,
                         child: ElevatedButton(
                             child: const Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => ChartPage()),
-                              );
+                            onPressed: () async {
+                              if (name != null && year != null && month != null && day != null && superiorNumber != null && contact != null && introduce != null){
+                                DocumentReference reference = await FirebaseFirestore.instance
+                                    .collection('Users')
+                                    .doc();
+                                await reference.set({
+                                  'id': reference.id,
+                                  'uid': FirebaseAuth.instance.currentUser!.uid,
+                                  'curTime': FieldValue.serverTimestamp(),
+                                  'name': name,
+                                  'year': year,
+                                  'month': month,
+                                  'day': day,
+                                  'superiorNumber': superiorNumber,
+                                  'organizationCode': organizationCode,
+                                  'contact': contact,
+                                  'introduce': introduce,
+                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChartPage()),
+                                );
+                              }
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(const Color(0xff9bb7e7)),
@@ -231,7 +284,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ],
           ),
-          ]),
+        ]),
     );
+  }
+  Future pickImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
   }
 }

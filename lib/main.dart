@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'my_info.dart';
 import 'organization_info.dart';
@@ -5,6 +6,8 @@ import 'organization_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import 'organizationchart.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,29 +51,47 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffdfe4ee),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
-            TextButton(
-              onPressed: (){
-                FirebaseRequest().signInWithGoogle().
-                then((result){
-                  if(result != null) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SecondPage()),
-                    );
-                  }
-                });
-              },
-              child:Text(
-              'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
-          ],
-        ),
+      body: StreamBuilder<Object>(
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+            .snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          return Center(
+            // Center is a layout widget. It takes a single child and positions it
+            // in the middle of the parent.
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
+                TextButton(
+                  onPressed: (){
+                    FirebaseRequest().signInWithGoogle().
+                    then((result){
+                      if(result != null) {
+                        if (snapshot.hasData) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChartPage()),
+                          );
+                        }
+                        else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SecondPage()),
+                          );
+                        }
+                      }
+                    });
+                  },
+                  child:Text(
+                  'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
+              ],
+            ),
+          );
+        }
       ),
     );
   }
@@ -99,7 +120,7 @@ class SecondPage extends StatelessWidget {
             SizedBox(height:10),
             TextButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const EditProfilePage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MyProfilePage()));
                 },
                 child: const Text('Enter existing getoknow chart!', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),)),
           ],
