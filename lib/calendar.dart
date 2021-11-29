@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:getoknow/src/table_calendar.dart';
 import 'package:getoknow/table_calendar.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../utils.dart';
 import 'src/table_calendar.dart';
@@ -14,36 +17,44 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffdfe4ee),
-      body: SafeArea(
-        child: Container(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+      body: StreamBuilder<Object>(
+        stream: FirebaseFirestore.instance
+          .collection('itembook')
+          .snapshots(),
+        builder: (context, snapshot) {
+          return SafeArea(
+            child: Container(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Color(0xff9bb7e7),
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                    Row(
+                      children: [
+                        IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          icon: const Icon(
+                            Icons.arrow_back_ios,
+                            color: Color(0xff9bb7e7),
+                            size: 30,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        SizedBox(width: MediaQuery.of(context).size.width * 0.5),
+                        const Text("My Calendar", textAlign: TextAlign.right, style: TextStyle(color: Color(0xff9bb7e7), fontSize: 25, fontWeight: FontWeight.bold)),
+                      ],
                     ),
-                    SizedBox(width: MediaQuery.of(context).size.width * 0.5),
-                    const Text("My Calendar", textAlign: TextAlign.right, style: TextStyle(color: Color(0xff9bb7e7), fontSize: 25, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                exercise_calendar(),
-              ]),
-        ),
+                    exercise_calendar(),
+                  ]),
+            ),
+          );
+        }
       ),
     );
   }
@@ -67,6 +78,7 @@ class _exercise_calendarState extends State<exercise_calendar> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  String? event;
 
   @override
   void initState() {
@@ -183,6 +195,8 @@ class _exercise_calendarState extends State<exercise_calendar> {
                 child: ValueListenableBuilder<List<Event>>(
                   valueListenable: _selectedEvents,
                   builder: (context, value, _) {
+                    ///////////////임의로 바꿈///////////////////
+                    value.length = 0;
                     if (value.length != 0) {
                       return ListView.builder(
                         itemCount: value.length,
@@ -219,10 +233,76 @@ class _exercise_calendarState extends State<exercise_calendar> {
                           SizedBox(
                             height: 3, // 높이 추가
                           ),
+                          Container(
+                            child: TextButton(
+                              onPressed: () {
+                                Alert(
+                                    context: context,
+                                    title: "내 일정 등록",
+                                    content: Column(
+                                      children: <Widget>[
+                                        TextFormField(
+                                          decoration: InputDecoration(
+                                            icon: Icon(Icons.account_circle),
+                                            labelText: '내 일정',
+                                          ),
+                                          onChanged: (value) {
+                                            event = value;
+                                          }
+                                        ),
+                                      ],
+                                    ),
+                                    buttons: [
+                                      DialogButton(
+                                        onPressed: () async {
+                                          DocumentReference reference = await FirebaseFirestore.instance
+                                              .collection('Events')
+                                              .doc();
+
+                                          await reference.set({
+                                            'id': reference.id,
+                                            'uid': FirebaseAuth.instance.currentUser!.uid,
+                                            'curTime': FieldValue.serverTimestamp(),
+                                            'eventDate': _onDaySelected,
+                                            'event': event,
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        //onPressed: () => Navigator.pop(context),
+                                        child: Text(
+                                          "등록",
+                                          style: TextStyle(color: Colors.white, fontSize: 20),
+                                        ),
+                                      )
+                                    ]).show();
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.fromLTRB(
+                                    MediaQuery.of(context).size.width * 0.03,
+                                    0,
+                                    MediaQuery.of(context).size.width * 0.03,
+                                    0),
+                                minimumSize: Size(70, 40),
+                                alignment: Alignment.center,
+                                backgroundColor: Color(0xff9bb7e7),
+                                shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: Color(0xff9bb7e7), width: 2),
+                                ),
+                              ),
+                              child: const Text(
+                                '등록',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xfff3f0f0),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       );
-                    }
-                    ;
+                    };
                   },
                 ),
               ),
