@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'dart:collection';
-import 'package:getoknow/table_calendar.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 /// Example event class.
 class Event {

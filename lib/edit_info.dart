@@ -254,6 +254,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     DocumentReference reference = await FirebaseFirestore.instance
                                         .collection('Users')
                                         .doc("RgQkZUyaYpPzfTmgs5y9");
+                                    
                                     await reference.update({
                                       'id': reference.id,
                                       'uid': FirebaseAuth.instance.currentUser!.uid,

@@ -1,14 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:getoknow/src/table_calendar.dart';
-import 'package:getoknow/table_calendar.dart';
 import 'package:graphview/GraphView.dart';
 
 import '../utils.dart';
 import 'calendar.dart';
-import 'src/table_calendar.dart';
-import 'table_calendar.dart';
 import 'googlemap.dart';
 import 'edit_info.dart';
 

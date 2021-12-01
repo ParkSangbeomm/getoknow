@@ -47,6 +47,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+bool? isNew;
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
@@ -58,50 +59,42 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const MaterialApp(home: Splash());
           } else {
-            return StreamBuilder<Object>(
-                stream: FirebaseFirestore.instance
-                    .collection('Users')
-                    .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-                    .snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  return Scaffold(
-                    backgroundColor:const Color(0xffdfe4ee),
-                    body: Center(
-                      // Center is a layout widget. It takes a single child and positions it
-                      // in the middle of the parent.
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
-                          TextButton(
-                            onPressed: (){
-                              FirebaseRequest().signInWithGoogle().
-                              then((result){
-                                if(result != null) {
-                                  if (snapshot.hasData) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ChartPage()),
-                                    );
-                                  }
-                                  else{
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SecondPage()),
-                                    );
-                                  }
-                                }
-                              });
-                            },
-                            child:Text(
-                              'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
-                        ],
-                      ),
-                    ),
-                  );
-                }
+            return Scaffold(
+              backgroundColor:const Color(0xffdfe4ee),
+              body: Center(
+                // Center is a layout widget. It takes a single child and positions it
+                // in the middle of the parent.
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset('assets/logo.png',width:MediaQuery.of(context).size.width,),
+                    TextButton(
+                      onPressed: (){
+                        FirebaseRequest().signInWithGoogle().
+                        then((result){
+                          if(result != null) {
+                            if (isNew == true) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SecondPage()),
+                              );
+                            }
+                            else{
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChartPage()),
+                              );
+                            }
+                          }
+                        });
+                      },
+                      child:Text(
+                        'Google Login', style: TextStyle(color: Colors.indigoAccent, fontSize: 17, decoration: TextDecoration.underline),),)
+                  ],
+                ),
+              ),
             );
           }
         }
@@ -158,7 +151,18 @@ class FirebaseRequest{
         accessToken: googleSignInAuthentication.accessToken,
         idToken: googleSignInAuthentication.idToken,
       );
-      await _auth.signInWithCredential(credential);
+
+      final UserCredential authResult =
+        await _auth.signInWithCredential(credential);
+
+      if (authResult.additionalUserInfo!.isNewUser) {
+        isNew = true;
+      }
+      else{
+        isNew = false;
+      }
+      print(isNew);
+
       return _auth.currentUser;
     }on FirebaseAuthException catch (e){
       throw e;
