@@ -5,8 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'locations.dart' as locations;
 
+final Map<String, Marker> _markers = {};
 FirebaseFirestore fireStore = FirebaseFirestore.instance;
-
+ double a = 0;
+ double b = 0;
 class FindgymPage extends StatefulWidget {
 
   @override
@@ -14,46 +16,30 @@ class FindgymPage extends StatefulWidget {
 }
 
 class _FindgymPageState extends State<FindgymPage> {
-  final Map<String, Marker> _markers = {};
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
-
-    String? title = "";
-    fireStore.collection("location").doc("amsterdam").get().then((DocumentSnapshot ds){
-      title = ds.get("name");
-
-      //print(ds.data());
-    });
-    fireStore.collection("location").get().then((querySnapshot) {
-      querySnapshot.docs.forEach((result) {
-        //print(result.get("image"));
-      });
-    });
-    setState(() {
-      _markers.clear();
-      fireStore.collection("location").get().then((querySnapshot) {
-        for (var result in querySnapshot.docs) {
-          print(result.get("name"));
-          print(result.get("lat"));
-          print(result.get("lng"));
-          print(result.get("address"));
-
-          var a = result.get("lat") is String ? double.parse(result.get("lat")) : result.get("lat");
-          var b = result.get("lng") is String ? double.parse(result.get("lng")) : result.get("lng");
-
-          final marker = Marker(
-          markerId: MarkerId(result.get("name")),
-          position: LatLng(a, b),
-          infoWindow: InfoWindow(
-            title: result.get("name"),
-            snippet: result.get("address"),
-          ),
-        );
-        _markers[result.get("name")] = marker;
-      }});
-    });
+    //final googleOffices = await locations.getGoogleOffices();
+    await makeMarker();
   }
+  Future<void> makeMarker() async{
+      _markers.clear();
+       await fireStore.collection("location").get().then((querySnapshot) {
+        for (var result in querySnapshot.docs) {
 
+          a = result.get("lat") is String ? double.parse(result.get("lat")) : result.get("lat");
+          b = result.get("lng") is String ? double.parse(result.get("lng")) : result.get("lng");
+          //print(a.runtimeType);
+          final marker = Marker(
+            markerId: MarkerId(result.get("name")),
+            position: LatLng(a, b),
+            infoWindow: InfoWindow(
+              title: result.get("name"),
+              snippet: result.get("address"),
+            ),
+          );
+          _markers[result.get("name")] = marker;
+        }});
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,9 +89,9 @@ class _FindgymPageState extends State<FindgymPage> {
                   height: MediaQuery.of(context).size.height * 0.7,
                   child: GoogleMap(
                     onMapCreated: _onMapCreated,
-                    initialCameraPosition: const CameraPosition(
-                      target: LatLng(35.95, 128.25),
-                      zoom: 2,
+                    initialCameraPosition:  CameraPosition(
+                      target: LatLng(a, b),
+                      zoom: 5,
                     ),
                     markers: _markers.values.toSet(),
                   ),
@@ -117,3 +103,4 @@ class _FindgymPageState extends State<FindgymPage> {
     );
   }
 }
+
