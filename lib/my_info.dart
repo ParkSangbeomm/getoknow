@@ -73,18 +73,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Center(
-                        child: CircleAvatar(
-                          radius: 80,
-                          //backgroundImage: AssetImage('assets/profile.png'),
-                        ),
-                      ),
-                      Center(
-                        child: TextButton(
-                          child: const Text("사진 변경", style: TextStyle(color: Colors.grey, decoration: TextDecoration.underline,)),
-                          onPressed: () {  },
-                        ),
-                      ),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                       const Text("이름"),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
@@ -250,7 +239,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                               if (name != null && year != null && month != null && day != null && superiorNumber != null && contact != null && introduce != null){
                                 DocumentReference reference = await FirebaseFirestore.instance
                                     .collection('Users')
-                                    .doc();
+                                    .doc(FirebaseAuth.instance.currentUser!.uid,);
                                 await reference.set({
                                   'id': reference.id,
                                   'uid': FirebaseAuth.instance.currentUser!.uid,
@@ -263,6 +252,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                   'organizationCode': organizationCode,
                                   'contact': contact,
                                   'introduce': introduce,
+                                  'myNumber': name!.hashCode.toString() + year!.toString() + month!.toString() + day!.toString(),
                                 });
                                 Navigator.push(
                                   context,

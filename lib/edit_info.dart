@@ -89,25 +89,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-                          const Text('개인 일련번호 (복사 기능)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                          const SizedBox(height: 3),
-                          const Text('1029108397424'),
-                          SizedBox(height: MediaQuery.of(context).size.height * 0.05),
                           const Center(
-                            child: Text("내 정보 수정", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                            child: Text("내 정보 수정", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: Colors.blueAccent)),
                           ),
-                          const Center(
-                            child: CircleAvatar(
-                              radius: 80,
-                              //backgroundImage: AssetImage('img/profile.png'),
-                            ),
-                          ),
-                          Center(
-                            child: TextButton(
-                              child: const Text("사진 변경", style: TextStyle(color: Colors.grey, decoration: TextDecoration.underline,)),
-                              onPressed: () {  },
-                            ),
-                          ),
+                          SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                           const Text("이름"),
                           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                           SizedBox(
@@ -251,9 +236,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 child: Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 onPressed: () async {
                                   if (name != null && year != null && month != null && day != null && superiorNumber != null && contact != null && introduce != null){
+                                    // DocumentReference reference = await FirebaseFirestore.instance
+                                    //     .collection('Users')
+                                    //     .doc("RgQkZUyaYpPzfTmgs5y9");
                                     DocumentReference reference = await FirebaseFirestore.instance
                                         .collection('Users')
-                                        .doc("RgQkZUyaYpPzfTmgs5y9");
+                                        .doc(FirebaseAuth.instance.currentUser!.uid);
                                     
                                     await reference.update({
                                       'id': reference.id,

@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import 'main.dart';
 import 'organizationchart.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -13,6 +16,10 @@ class _CreateAccountState extends State<CreateAccount> {
   final organizationNameController = TextEditingController();
   final organizationIntroduceController = TextEditingController();
   final organizationCodeEditController = TextEditingController();
+
+  String? organizationName;
+  String? organizationIntro;
+  String? organizationCode;
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +77,9 @@ class _CreateAccountState extends State<CreateAccount> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            organizationName = value;
+                          }
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
@@ -86,6 +96,9 @@ class _CreateAccountState extends State<CreateAccount> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            organizationIntro = value;
+                          }
                         ),
                       ),
 
@@ -103,6 +116,9 @@ class _CreateAccountState extends State<CreateAccount> {
                             filled: true,
                             isDense: true,
                           ),
+                          onChanged: (value) {
+                            organizationCode = value;
+                          }
                         ),
                       ),
 
@@ -110,8 +126,24 @@ class _CreateAccountState extends State<CreateAccount> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
                         child: ElevatedButton(
-                            child: Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            onPressed: () {
+                            child: const Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                            onPressed: () async {
+                              if (organizationName != null && organizationIntro != null && organizationCode != null){
+                                DocumentReference reference = await FirebaseFirestore.instance
+                                    .collection('company')
+                                    .doc();
+                                await reference.set({
+                                  'id': reference.id,
+                                  'curTime': FieldValue.serverTimestamp(),
+                                  'organizationName': organizationName,
+                                  'organizationIntro': organizationIntro,
+                                  'organizationCode': organizationCode,
+                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => SecondPage()),
+                                );
+                              }
                             },
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(Color(0xff9bb7e7)),
