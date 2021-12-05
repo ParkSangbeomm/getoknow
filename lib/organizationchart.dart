@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,13 @@ class ChartPage extends StatefulWidget {
 }
 
 class _ChartPageState extends State<ChartPage> {
+  static Future<String> getPlaceAddress(double lat, double lng) async{
+    final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?address=서울특별시+강북구+수유동+381-2&key=AIzaSyBWe2R-gsETR-bTh5NQ3JLVj_xILiYOasE'));
+    print(jsonDecode(response.body)['results'][0]['geometry']['location']['lat']);
+    return jsonDecode(response.body)['results'][0];
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -216,6 +224,7 @@ class _ChartPageState extends State<ChartPage> {
     return InkWell(
       onTap: () {
         print('clicked');
+        getPlaceAddress(1.1,2.2);
         print(orCode);
       },
       child: Container(
