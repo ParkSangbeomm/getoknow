@@ -291,6 +291,7 @@ class _ChartPageState extends State<ChartPage> {
     for(var i=0;i<node.length;i++){
       var val = node[i].key!.value;
       int s = myNumberIndex[superMyNumber![val]] as int;
+
       graph.addEdge(node[s], node[i]);
     }
   }
