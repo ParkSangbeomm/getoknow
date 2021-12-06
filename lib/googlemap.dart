@@ -1,14 +1,22 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'locations.dart' as locations;
+import 'organizationchart.dart';
+import 'package:http/http.dart' as http;
 
+String orgaDes = "";
+String orgaName = "";
+String address = "";
 final Map<String, Marker> _markers = {};
 FirebaseFirestore fireStore = FirebaseFirestore.instance;
- double a = 0;
- double b = 0;
+double a = 0;
+double b = 0;
 class FindgymPage extends StatefulWidget {
 
   @override
@@ -23,22 +31,30 @@ class _FindgymPageState extends State<FindgymPage> {
   }
   Future<void> makeMarker() async{
       _markers.clear();
-       await fireStore.collection("location").get().then((querySnapshot) {
-        for (var result in querySnapshot.docs) {
+      print("orcode");
+      print(orCode);
+       await fireStore.collection("company").where('organizationCode', isEqualTo: orCode).get().then((querySnapshot) async {
+         for(var result in querySnapshot.docs) {
+           orgaDes = result.get('organizationIntro');
+           orgaName = result.get('organizationName');
+           address = result.get('organizationAddress');
+           address.replaceAll(" ", "+");
+         }
+         final response = await http.get(Uri.parse('https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=AIzaSyBWe2R-gsETR-bTh5NQ3JLVj_xILiYOasE'));
+         a = jsonDecode(response.body)['results'][0]['geometry']['location']['lat'];
+         b = jsonDecode(response.body)['results'][0]['geometry']['location']['lng'];
 
-          a = result.get("lat") is String ? double.parse(result.get("lat")) : result.get("lat");
-          b = result.get("lng") is String ? double.parse(result.get("lng")) : result.get("lng");
-          //print(a.runtimeType);
-          final marker = Marker(
-            markerId: MarkerId(result.get("name")),
-            position: LatLng(a, b),
-            infoWindow: InfoWindow(
-              title: result.get("name"),
-              snippet: result.get("address"),
-            ),
-          );
-          _markers[result.get("name")] = marker;
-        }});
+
+         final marker = Marker(
+           markerId: MarkerId(orgaName),
+           position: LatLng(a, b),
+           infoWindow: InfoWindow(
+             title: orgaName,
+             snippet: orgaDes,
+           ),
+         );
+         _markers[orgaName] = marker;
+       });
   }
   @override
   Widget build(BuildContext context) {
@@ -91,7 +107,7 @@ class _FindgymPageState extends State<FindgymPage> {
                     onMapCreated: _onMapCreated,
                     initialCameraPosition:  CameraPosition(
                       target: LatLng(a, b),
-                      zoom: 5,
+                      zoom: 10,
                     ),
                     markers: _markers.values.toSet(),
                   ),

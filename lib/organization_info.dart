@@ -16,10 +16,12 @@ class _CreateAccountState extends State<CreateAccount> {
   final organizationNameController = TextEditingController();
   final organizationIntroduceController = TextEditingController();
   final organizationCodeEditController = TextEditingController();
+  final organizationAddressController = TextEditingController();
 
   String? organizationName;
   String? organizationIntro;
   String? organizationCode;
+  String? organizationAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +124,26 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                       ),
 
+                      SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
+                      const Text("주소 지번"),
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.65,
+                        child: TextField(
+                            controller: organizationAddressController,
+                            decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.all(10.0),
+                              border: OutlineInputBorder(),
+                              fillColor: Colors.white,
+                              filled: true,
+                              isDense: true,
+                            ),
+                            onChanged: (value) {
+                              organizationAddress = value;
+                            }
+                        ),
+                      ),
+
                       SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
@@ -138,6 +160,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                   'organizationName': organizationName,
                                   'organizationIntro': organizationIntro,
                                   'organizationCode': organizationCode,
+                                  'organizationAddress' : organizationAddress,
                                 });
                                 Navigator.push(
                                   context,
