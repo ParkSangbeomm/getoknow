@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,88 +45,103 @@ class _ChartPageState extends State<ChartPage> {
               .snapshots(),
           builder: (context, AsyncSnapshot snapshot) {
             if (!snapshot.hasData) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return CircularProgressIndicator();
             }
+
             return SafeArea(
-              child: Container(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const Text("  Organization Chart", textAlign: TextAlign.right, style: TextStyle(color: Color(0xff9bb7e7), fontSize: 25, fontWeight: FontWeight.bold)),
-                            Spacer(),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.calendar_today,
-                                color: Colors.blueAccent,
-                                size: 30.0,
+                child: Container(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Text("  Organization Chart",
+                                  textAlign: TextAlign.right, style: TextStyle(
+                                      color: Color(0xff9bb7e7),
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold)),
+                              Spacer(),
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.blueAccent,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => CalendarPage()),
+                                  );
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => CalendarPage()),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.location_on,
-                                color: Colors.blueAccent,
-                                size: 30.0,
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.location_on,
+                                  color: Colors.blueAccent,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FindgymPage()),
+                                  );
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => FindgymPage()),
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.person,
-                                color: Colors.blueAccent,
-                                size: 30.0,
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.person,
+                                  color: Colors.blueAccent,
+                                  size: 30.0,
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) =>
+                                        EditProfilePage()),
+                                  );
+                                },
                               ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => EditProfilePage()),
-                                );
-                              },
-                            ),
-                          ]
-                      ),
-                      Row(
-                          children: [
-                            const Text('   개인 일련번호: ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                            Text(snapshot.data.docs[0].get('myNumber'), style: TextStyle(fontSize: 15)),
-                            IconButton(
-                              icon: const Icon(Icons.copy, size: 20),
-                              onPressed:() async {
-                                await Clipboard.setData(ClipboardData(text: snapshot.data!.docs[0].get('myNumber')));
-                              },
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                            ),
-                          ]),
-                      Row(
-                          children: [
-                            const Text('   기관 코드: ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                            Text(snapshot.data.docs[0].get('organizationCode'), style: TextStyle(fontSize: 15)),
-                            IconButton(
-                              icon: const Icon(Icons.copy, size: 20),
-                              onPressed:() async {
-                                await Clipboard.setData(ClipboardData(text: snapshot.data!.docs[0].get('organizationCode')));
-                              },
-                              constraints: BoxConstraints(),
-                              padding: EdgeInsets.zero,
-                            ),
-                          ]),
-                      Wrap(
+                            ]
+                        ),
+                        Row(
+                            children: [
+                              const Text('   개인 일련번호: ', style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                              Text(snapshot.data.docs[0].get('myNumber'),
+                                  style: TextStyle(fontSize: 15)),
+                              IconButton(
+                                icon: const Icon(Icons.copy, size: 20),
+                                onPressed: () async {
+                                  await Clipboard.setData(ClipboardData(
+                                      text: snapshot.data!.docs[0].get(
+                                          'myNumber')));
+                                },
+                                constraints: BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                              ),
+                            ]),
+                        Row(
+                            children: [
+                              const Text('   기관 코드: ', style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15)),
+                              Text(snapshot.data.docs[0].get(
+                                  'organizationCode'), style: TextStyle(
+                                  fontSize: 15)),
+                              IconButton(
+                                icon: const Icon(Icons.copy, size: 20),
+                                onPressed: () async {
+                                  await Clipboard.setData(ClipboardData(
+                                      text: snapshot.data!.docs[0].get(
+                                          'organizationCode')));
+                                },
+                                constraints: BoxConstraints(),
+                                padding: EdgeInsets.zero,
+                              ),
+                            ]),
+                        /*Wrap(
                         children: [
                           Container(
                             width: 100,
@@ -171,49 +187,46 @@ class _ChartPageState extends State<ChartPage> {
                               },
                             ),
                           ),
-                          RaisedButton(
-                            onPressed: () {
-                              final node12 = Node.Id(r.nextInt(100));
-                              var edge = graph.getNodeAtPosition(r.nextInt(graph.nodeCount()));
-                              print(edge);
-                              graph.addEdge(edge, node12);
-                              setState(() {});
-                            },
-                            child: Text("Add"),
-                          )
+
                         ],
                       ),
-                      FutureBuilder(
-                        future: init(),
-                        builder: (BuildContext context, AsyncSnapshot snapshot) {
-                          if (!snapshot.hasData == false) {
-                            return CircularProgressIndicator();
-                          }else{
-                          return Expanded(
-                            child: InteractiveViewer(
-                                constrained: false,
-                                boundaryMargin: EdgeInsets.all(100),
-                                minScale: 0.01,
-                                maxScale: 5.6,
-                                child: GraphView(
-                                  graph: graph,
-                                  algorithm: BuchheimWalkerAlgorithm(builder, TreeEdgeRenderer(builder)),
-                                  paint: Paint()
-                                    ..color = Colors.green
-                                    ..strokeWidth = 1
-                                    ..style = PaintingStyle.stroke,
-                                  builder: (Node node) {
-                                    // I can decide what widget should be shown here based on the id
-                                    var a = node.key!.value as int;
-                                    return rectangleWidget(a);
-                                  },
-                                )),
-                          );}
-                        }
-                      ),
-                    ]),
-              ),
-            );
+
+                       */
+                        FutureBuilder(
+                            future: init(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot snapshot) {
+                              if (node.isEmpty) {
+                                return CircularProgressIndicator();
+                              } else {
+                                return Expanded(
+                                  child: InteractiveViewer(
+                                      constrained: false,
+                                      boundaryMargin: EdgeInsets.all(100),
+                                      minScale: 0.01,
+                                      maxScale: 5.6,
+                                      child: GraphView(
+                                        graph: graph,
+                                        algorithm: BuchheimWalkerAlgorithm(
+                                            builder, TreeEdgeRenderer(builder)),
+                                        paint: Paint()
+                                          ..color = Colors.green
+                                          ..strokeWidth = 1
+                                          ..style = PaintingStyle.stroke,
+                                        builder: (Node node) {
+                                          // I can decide what widget should be shown here based on the id
+                                          var a = node.key!.value as int;
+                                          return rectangleWidget(a);
+                                        },
+                                      )),
+                                );
+                              }
+                            }
+                        ),
+                      ]),
+                ),
+              );
+
           }
       ),
     );
@@ -264,7 +277,36 @@ class _ChartPageState extends State<ChartPage> {
       ..orientation = (BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM);
   }
   void asyncM() async{
-    await _setting();
+    int? size;
+    await fireStore.collection("Users").doc(FirebaseAuth.instance.currentUser!.uid).get().then((querySnapshot) {
+      orCode = querySnapshot.get("organizationCode");
+      //print(querySnapshot.get("name"));
+    });
+
+    // final Map<String, Node> _nodes = {};
+    int count=1;
+    await fireStore.collection("Users").where('organizationCode',isEqualTo: orCode).get().then((querySnapshot){
+      for(var result in querySnapshot.docs){
+        names[int.parse(result.get("myNumber"))] = result.get("name");
+        myNumberIndex[int.parse(result.get("myNumber"))] = count;
+        superMyNumber![int.parse(result.get("myNumber"))] = int.parse(result.get("superiorNumber"));
+        node.add(Node.Id(int.parse(result.get("myNumber"))));
+        //print("test");
+        //print(Node.Id(int.parse(result.get("myNumber"))));
+        print(node);
+        count++;
+        //size = querySnapshot.size;
+      }
+    });
+    for(var i=0;i<node.length;i++){
+      var val = node[i].key!.value;
+      int s = myNumberIndex[superMyNumber![val]] as int;
+      print(val);
+      print(s);
+      if(s!=0)
+        graph.addEdge(node[s-1], node[i]);
+    }
+    sleep(const Duration(seconds:2));
   }
   _setting() async{
     int? size;
@@ -283,7 +325,7 @@ class _ChartPageState extends State<ChartPage> {
         node.add(Node.Id(int.parse(result.get("myNumber"))));
         //print("test");
         //print(Node.Id(int.parse(result.get("myNumber"))));
-        //print(node);
+        print(node);
         count++;
         //size = querySnapshot.size;
       }
@@ -291,8 +333,10 @@ class _ChartPageState extends State<ChartPage> {
     for(var i=0;i<node.length;i++){
       var val = node[i].key!.value;
       int s = myNumberIndex[superMyNumber![val]] as int;
-
-      graph.addEdge(node[s], node[i]);
+      print(val);
+      print(s);
+      if(s!=0)
+        graph.addEdge(node[s-1], node[i]);
     }
   }
 }

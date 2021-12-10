@@ -24,7 +24,6 @@ class FindgymPage extends StatefulWidget {
 }
 
 class _FindgymPageState extends State<FindgymPage> {
-
   Future<void> _onMapCreated(GoogleMapController controller) async {
     //final googleOffices = await locations.getGoogleOffices();
     await makeMarker();
@@ -82,15 +81,7 @@ class _FindgymPageState extends State<FindgymPage> {
                         Navigator.pop(context);
                       },
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.75,
-                      child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: '지역, 지하철쳑, 센터 검색',
-                          )
-                      ),
-                    ),
+
                   ],
                 ),
               ),
@@ -102,14 +93,23 @@ class _FindgymPageState extends State<FindgymPage> {
                     0,
                     0.0),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.7,
-                  child: GoogleMap(
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition:  CameraPosition(
-                      target: LatLng(a, b),
-                      zoom: 10,
-                    ),
-                    markers: _markers.values.toSet(),
+                  height: MediaQuery.of(context).size.height * 0.85,
+                  child: FutureBuilder(
+                      future: makeMarker(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot snapshot) {
+                        if (_markers.isEmpty) {
+                          return CircularProgressIndicator();
+                        }else{
+                        return GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        initialCameraPosition:  CameraPosition(
+                          target: LatLng(a, b),
+                          zoom: 10,
+                        ),
+                        markers: _markers.values.toSet(),
+                      );}
+                    }
                   ),
                 ),
               ),
