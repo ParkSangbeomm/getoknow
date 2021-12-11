@@ -335,8 +335,13 @@ class _ChartPageState extends State<ChartPage> {
       int s = myNumberIndex[superMyNumber![val]] as int;
       print(val);
       print(s);
-      if(s!=0)
-        graph.addEdge(node[s-1], node[i]);
+
+      if(node.length==1){
+        graph.addEdge(node[s], node[i]);
+      }else {
+        if (s != 0)
+          graph.addEdge(node[s - 1], node[i]);
+      }
     }
   }
 }

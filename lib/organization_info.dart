@@ -125,7 +125,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
 
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
-                      const Text("주소 지번"),
+                      const Text("도로명 주소"),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,

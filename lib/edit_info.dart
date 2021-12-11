@@ -191,7 +191,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ),
 
                           SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
-                          const Text("Contact (선택)"),
+                          const Text("Contact"),
                           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.65,
@@ -211,7 +211,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ),
 
                           SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
-                          const Text("자기소개 (선택)"),
+                          const Text("자기소개"),
                           SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.65,
@@ -233,7 +233,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.65,
                             child: ElevatedButton(
-                                child: Text('제출하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                child: Text('수정하기', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                                 onPressed: () async {
                                   if (name != null && year != null && month != null && day != null && superiorNumber != null && contact != null && introduce != null){
                                     // DocumentReference reference = await FirebaseFirestore.instance
