@@ -192,7 +192,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       ),
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
 
-                      const Text("Contact (선택)"),
+                      const Text("Contact"),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
@@ -212,7 +212,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                       ),
 
                       SizedBox(height: MediaQuery.of(context).size.width * 0.05,),
-                      const Text("자기소개 (선택)"),
+                      const Text("자기소개"),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.65,
